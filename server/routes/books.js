@@ -7,7 +7,7 @@ let mongoose = require('mongoose');
 let book = require('../models/books');
 
 /* GET books List page. READ */
-router.get('/books/details', (req, res, next) => {
+router.get('/', (req, res, next) => {
   // find all books in the books collection
   book.find( (err, books) => {
     if (err) {
@@ -29,7 +29,6 @@ router.get('/add', (req, res, next) => {
     /*****************
      * ADD CODE HERE *
      *****************/
-    
     res.render('/books/details', {title: 'Add Book', 
     displayName: req.user ? req.user.displayName : ''})
 
@@ -41,25 +40,26 @@ router.post('/add', (req, res, next) => {
     /*****************
      * ADD CODE HERE *
      *****************/
-    let newBook = Book({
-      "Title": req.body.title,
-      "Description": req.body.description,
-      "Price": req.body.price,
-      "Author": req.body.author,
-      "Genre": req.body.genre
-    });
+    let newBook = book({
+      "_id": id,
+      "Title": req.body.Title,
+      "Price": req.body.Price,
+      "Description": req.body.Description,
+      "Author": req.body.Author,
+      "Genre": req.body.Genre
+  });
 
-    book.create(newBook, (err, Book) =>{
-      if(err)
-      {
-          console.log(err);
-          res.end(err);
-      }
-      else
-      {
-          // refresh the book list
-          res.redirect('/books');
-      }
+  book.create(newBook, (err, book) =>{
+    if(err)
+    {
+        console.log(err);
+        res.end(err);
+    }
+    else
+    {
+        // refresh the book list
+        res.redirect('/');
+    }
   });
 
 });
@@ -93,16 +93,15 @@ router.post('/:id', (req, res, next) => {
     /*****************
      * ADD CODE HERE *
      *****************/
-    
     let id = req.params.id
 
-    let updatedBook = Books({
+    let updatedBook = book({
         "_id": id,
-        "Title": req.body.title,
-        "Description": req.body.description,
-        "Price": req.body.price,
-        "Author": req.body.author,
-        "Genre": req.body.genre
+        "Title": req.body.Title,
+        "Price": req.body.Price,
+        "Description": req.body.Description,
+        "Author": req.body.Author,
+        "Genre": req.body.Genre
     });
 
     book.updateOne({_id: id}, updatedBook, (err) => {
@@ -126,7 +125,6 @@ router.get('/delete/:id', (req, res, next) => {
     /*****************
      * ADD CODE HERE *
      *****************/
-
     let id = req.params.id;
 
     book.remove({_id: id}, (err) => {
